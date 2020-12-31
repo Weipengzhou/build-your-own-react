@@ -1,9 +1,15 @@
-function createElement(parentEle, props, childEle) {
+function createElement(parentEle, props, ...childEles) {
   if (typeof parentEle === 'function') {
     return parentEle();
   }
   let parentElement = document.createElement(parentEle);
-  parentElement.innerHTML = childEle;
+  childEles.forEach(child => {
+    if (typeof child === 'string') {
+      parentElement.innerHTML += child;
+      return;
+    }
+    parentElement.appendChild(child);
+  })
   return parentElement;
 }
 
@@ -20,8 +26,15 @@ const ReactDOM = {
 }
 
 
-const Hello = function() {
-  return React.createElement('div', null, 'Hello');
+
+
+
+const HelloVersion3 = function() {
+  return React.createElement('div', null, '版本3.0')
 }
-const HelloWord = React.createElement(Hello, null, null);
-ReactDOM.render(HelloWord, document.getElementById('root'));
+const helloWorld1 = React.createElement(HelloVersion3, null, null);
+const helloWorld2 = React.createElement(HelloVersion3, null, null);
+const divEle = React.createElement('div', null, '我被一个div标签包裹');
+
+const parent = React.createElement('div', null, helloWorld1, helloWorld2, divEle, '我是文本内容');
+ReactDOM.render(parent, document.getElementById('root'));
